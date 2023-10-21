@@ -14,6 +14,7 @@ public class PhotoCopier
     
     public void CopyPhotos(string sourceDirectory, string destinationDirectory)
     {
+        // TODO: Can we log to a spectre console sink?
         _logger.LogInformation(
             "Copying photos from {SourceDirectory} to {DestinationDirectory}",
             sourceDirectory,

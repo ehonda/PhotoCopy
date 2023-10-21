@@ -1,3 +1,5 @@
-﻿// TODO: Use Spectre.Console to build this
+﻿using App;
+using Spectre.Console.Cli;
 
-Console.WriteLine("Hello World!");
+var app = new CommandApp<CopyCommand>();
+return await app.RunAsync(args);
