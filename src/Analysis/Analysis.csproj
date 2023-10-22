@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Core\Core.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
       <PackageReference Include="MetadataExtractor" Version="2.8.1" />
       <PackageReference Include="Spectre.Console.Analyzer" Version="0.47.0">
