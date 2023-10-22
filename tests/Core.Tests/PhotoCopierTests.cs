@@ -103,7 +103,7 @@ public class PhotoCopierTests
         Sandbox.InsertFile(decemberFileA, "2023-12-31 23:59:59");
         
         // Act
-        var photoCopier = new PhotoCopier(new NullLogger<PhotoCopier>());
+        var photoCopier = new PhotoCopier(new FileCreationTimeExtractor(), new NullLogger<PhotoCopier>());
         photoCopier.CopyPhotos(Sandbox.GetSourceDirectory(), Sandbox.GetDestinationDirectory());
 
         // Assert

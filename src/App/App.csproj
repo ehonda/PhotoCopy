@@ -14,6 +14,7 @@
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
       <PackageReference Include="MetadataExtractor" Version="2.8.1" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
       <PackageReference Include="Spectre.Console.Analyzer" Version="0.47.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

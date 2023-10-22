@@ -5,10 +5,14 @@ namespace Core;
 
 public class PhotoCopier
 {
+    private readonly IMediaTakenAtExtractor _mediaTakenAtExtractor;
     private readonly ILogger<PhotoCopier> _logger;
 
-    public PhotoCopier(ILogger<PhotoCopier> logger)
+    public PhotoCopier(
+        IMediaTakenAtExtractor mediaTakenAtExtractor,
+        ILogger<PhotoCopier> logger)
     {
+        _mediaTakenAtExtractor = mediaTakenAtExtractor;
         _logger = logger;
     }
     
@@ -54,10 +58,10 @@ public class PhotoCopier
     }
     
     // Enumerate files ordered by creation date and grouped by year / month
-    private static IReadOnlyDictionary<(int Year, int Month), IReadOnlyList<string>> GetFiles(string directory)
+    private IReadOnlyDictionary<(int Year, int Month), IReadOnlyList<string>> GetFiles(string directory)
         => Directory
             .EnumerateFiles(directory)
-            .Select(file => (file, new FileInfo(file).CreationTimeUtc))
+            .Select(file => (file, CreationTimeUtc: _mediaTakenAtExtractor.ExtractTakenAt(file).Value.ToDateTimeUtc()))
             .OrderBy(tuple => tuple.CreationTimeUtc)
             .GroupBy(tuple => (tuple.CreationTimeUtc.Year, tuple.CreationTimeUtc.Month))
             .ToDictionary(
