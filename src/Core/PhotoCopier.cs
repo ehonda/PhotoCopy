@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Core;
 
+// TODO: There should be a better divide between logging and how it is displayed in the console
 public class PhotoCopier
 {
     private readonly IMediaTakenAtExtractor _mediaTakenAtExtractor;
@@ -16,8 +17,14 @@ public class PhotoCopier
         _logger = logger;
     }
     
-    public void CopyPhotos(string sourceDirectory, string destinationDirectory)
+    public void CopyPhotos(string sourceDirectory, string destinationDirectory, bool dryRun = false)
     {
+        if (dryRun)
+        {
+            _logger.LogInformation("Performing a dry run");
+            destinationDirectory = Path.Combine(destinationDirectory, "dry_run");
+        }
+        
         // TODO: Can we log to a spectre console sink?
         _logger.LogInformation(
             "Copying photos from {SourceDirectory} to {DestinationDirectory}",
@@ -26,6 +33,7 @@ public class PhotoCopier
         
         var photos = GetFiles(sourceDirectory);
 
+        // TODO: Log how much is in each group ahead of time
         foreach (var (key, files) in photos)
         {
             var (year, month) = key;
@@ -46,6 +54,14 @@ public class PhotoCopier
             foreach (var file in files)
             {
                 var destinationFile = Path.Combine(destination, Path.GetFileName(file));
+                
+                if (dryRun)
+                {
+                    File.Create(destinationFile);
+                    
+                    continue;
+                }
+                
                 File.Copy(file, destinationFile);
             }
         }

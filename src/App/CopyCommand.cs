@@ -40,7 +40,7 @@ public class CopyCommand : Command<CopyCommandSettings>
 
         try
         {
-            photoCopier.CopyPhotos(settings.Source, settings.Target);
+            photoCopier.CopyPhotos(settings.Source, settings.Target, settings.DryRun);
         }
         catch (Exception exception)
         {

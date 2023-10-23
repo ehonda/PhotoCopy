@@ -14,4 +14,8 @@ public class CopyCommandSettings : CommandSettings
     [Description("The target directory path.")]
     [CommandArgument(1, "<TARGET>")]
     public string Target { get; init; } = null!;
+    
+    [Description("Whether to perform a dry run.")]
+    [CommandOption("-d|--dry-run")]
+    public bool DryRun { get; init; }
 }

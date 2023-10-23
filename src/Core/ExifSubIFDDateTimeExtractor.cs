@@ -20,14 +20,12 @@ public class ExifSubIfdDateTimeExtractor : IMediaTakenAtExtractor
             return Result.Fail($"Could not find ExifSubIfdDirectory in {file}");
         }
         
-        // We get the string behind the Date/Time original tag, together with the Time Zone Original tag
-        // and parse it to a ZonedDateTime
+        // We get the string behind the Date/Time original tag and parse it as a LocalDateTime
         var dateTimeString = exifSubIfdDirectory.GetString(ExifDirectoryBase.TagDateTimeOriginal);
-        var timeZoneString = exifSubIfdDirectory.GetString(ExifDirectoryBase.TagTimeZoneOriginal);
         
-        if (dateTimeString is null || timeZoneString is null)
+        if (dateTimeString is null)
         {
-            return Result.Fail($"Could not find DateTimeOriginal or TimeZoneOriginal in {file}");
+            return Result.Fail($"Could not find DateTimeOriginal in {file}");
         }
 
         var localDateTime = LocalDateTimePattern
@@ -37,6 +35,15 @@ public class ExifSubIfdDateTimeExtractor : IMediaTakenAtExtractor
         if (!localDateTime.Success)
         {
             return Result.Fail($"Could not parse DateTimeOriginal in {file}");
+        }
+        
+        // There sometimes isn't a time zone string, in which case we interpret the local time in Europe/Berlin
+        var timeZoneString = exifSubIfdDirectory.GetString(ExifDirectoryBase.TagTimeZoneOriginal);
+
+        if (timeZoneString is null)
+        {
+            var zonedDateTime = localDateTime.Value.InZoneLeniently(DateTimeZoneProviders.Tzdb["Europe/Berlin"]);
+            return Result.Ok(zonedDateTime.ToInstant());
         }
         
         var offset = OffsetPattern.GeneralInvariant.Parse(timeZoneString);
