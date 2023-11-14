@@ -17,7 +17,9 @@ public class CopyCommand : Command<CopyCommandSettings>
             new ExifSubIfdDateTimeExtractor(),
             new FallbackExtractor(
                 new QuickTimeMovieHeaderExtractor(),
-                new FileCreationTimeExtractor()));
+                new FallbackExtractor(
+                    new FileNameTakenAtExtractor(),
+                    new FileCreationTimeExtractor())));
 
         // See: https://learn.microsoft.com/en-us/dotnet/core/extensions/logging?tabs=command-line#non-host-console-app
         // TODO: Use Serilog sink? https://github.com/serilog/serilog-sinks-console
