@@ -84,7 +84,8 @@ public partial class VerifyCommand : Command<VerifyCommandSettings>
         }
         
         var yearMatches = zonedDateTime.Value.Year.ToString() == year;
-        var monthMatches = zonedDateTime.Value.Month.ToString() == month;
+        // Month should be converted with two digits
+        var monthMatches = zonedDateTime.Value.Month.ToString("00") == month;
         
         return yearMatches && monthMatches;
     }
